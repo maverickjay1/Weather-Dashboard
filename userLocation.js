@@ -1,7 +1,7 @@
+import { searchButtonRef } from "./main.js";
+
 export async function handleLocationSearch(locationInputRef) {
   return new Promise(async (resolve, reject) => {
-    // event listener for search button / location input
-    // searchButtonRef.addEventListener("click", async () => {
     const location = locationInputRef.value;
 
     const appIdGeo = "37b29f091f8754cf8600dea56dee3863"; // OpenWeatherMap API key
@@ -25,4 +25,41 @@ export async function handleLocationSearch(locationInputRef) {
       reject(error);
     }
   });
+}
+
+export async function fetchLocationSuggestions(query) {
+  const appIdGeo = "37b29f091f8754cf8600dea56dee3863";
+  const geocodingUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=10&appid=${appIdGeo}`;
+  const response = await axios.get(geocodingUrl);
+  return response.data;
+}
+
+export function displayLocationSuggestions(
+  suggestions,
+  locationDropdownRef,
+  locationInputRef
+) {
+  if (suggestions.length) {
+    const choicesHTML = suggestions.map((item, index) => {
+      const { name = "", state = "", country = "" } = item;
+      return `<p id="${index}">${name ? name + "," : ""} ${
+        state ? state + "," : ""
+      } ${country}</p>`;
+    });
+
+    locationDropdownRef.innerHTML = choicesHTML.join("");
+
+    // Add click event listeners to the suggestions
+    const suggestionItems = locationDropdownRef.querySelectorAll("p");
+    suggestionItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        locationInputRef.value = item.textContent.trim();
+        locationDropdownRef.innerHTML = ""; // Clear the dropdown
+        // Automatically trigger the search
+        searchButtonRef.click();
+      });
+    });
+  } else {
+    locationDropdownRef.innerHTML = ""; // Clear dropdown if no suggestions
+  }
 }

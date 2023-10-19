@@ -1,9 +1,30 @@
 import { handleLocationSearch } from "./userLocation.js";
+import {
+  fetchLocationSuggestions,
+  displayLocationSuggestions,
+} from "./userLocation.js";
 import { fetchWeatherData } from "./fetchWeather.js";
 
-const searchButtonRef = document.getElementById("searchButton");
+export const searchButtonRef = document.getElementById("searchButton");
 const locationInputRef = document.getElementById("locationInput");
 const weatherInfoRef = document.getElementById("weatherInfo");
+const locationDropdownRef = document.getElementById("locationDropdown"); // Add a reference for the dropdown
+
+locationInputRef.addEventListener("input", async () => {
+  try {
+    // Fetch location suggestions based on the input value
+    const suggestions = await fetchLocationSuggestions(locationInputRef.value);
+
+    // Populate the dropdown with suggestions
+    displayLocationSuggestions(
+      suggestions,
+      locationDropdownRef,
+      locationInputRef
+    );
+  } catch (error) {
+    console.error("Location suggestions error: ", error);
+  }
+});
 
 searchButtonRef.addEventListener("click", async () => {
   try {
