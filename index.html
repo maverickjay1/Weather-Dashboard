@@ -7,11 +7,21 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/joi@17.11.0/dist/joi-browser.min.js"></script>
     <script type="module" src="main.js"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <input type="text" id="locationInput" placeholder="Enter a city or town" />
-    <div id="locationDropdown"></div>
-    <button id="searchButton">Search</button>
-    <div id="weatherInfo"></div>
+    <main class="mainDisplay">
+      <div class="searchBox">
+        <input
+          type="text"
+          id="locationInput"
+          class="locationInput"
+          placeholder="Enter a city or town"
+        />
+      </div>
+      <div id="locationDropdown" class="locationDropdown"></div>
+      <button id="searchButton">Search</button>
+      <div id="weatherInfo"></div>
+    </main>
   </body>
 </html>
