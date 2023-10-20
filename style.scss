@@ -1,4 +1,4 @@
-.searchBox {
+/*.searchBox {
   position: relative;
   display: flex;
   justify-content: center;
@@ -15,4 +15,33 @@
   padding-right: 1%;
   border-radius: 4px;
   //   text bold
+}*/
+
+.boxDropdown {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 18%;
+}
+
+.locationInput {
+  width: 350px;
+}
+
+.locationDropdown {
+  font-size: 20px;
+  width: 350px;
+  background-color: rgb(238, 231, 231);
+  border-radius: 4px;
+  p {
+    padding-left: 10px;
+    padding-bottom: 3px;
+  }
+  p:hover {
+    background-color: rgb(212, 207, 207);
+    color: rgb(0, 0, 0);
+  }
+  cursor: pointer;
 }
