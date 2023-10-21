@@ -42,9 +42,8 @@ export function displayLocationSuggestions(
   if (suggestions.length) {
     const choicesHTML = suggestions.map((item, index) => {
       const { name = "", state = "", country = "" } = item;
-      return `<p id="${index}" >${name ? name + "," : ""} ${
-        state ? state + "," : ""
-      } ${country}</p>`;
+      const fullLocation = `${name}, ${state}, ${country}`;
+      return `<p id="${index}" >${fullLocation}</p>`;
     });
 
     locationDropdownRef.innerHTML = choicesHTML.join("");

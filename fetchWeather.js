@@ -1,5 +1,11 @@
 import { handleLocationSearch } from "./userLocation.js";
 
+function capitalizeFirstLetterOfWords(text) {
+  return text.replace(/\w\S*/g, function (word) {
+    return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+  });
+}
+
 export async function fetchWeatherData(
   lat,
   lon,
@@ -21,26 +27,53 @@ export async function fetchWeatherData(
     const currentForecast = forecasts[0];
 
     // Display the current temperature
-    const currentTemperature = currentForecast.main.temp.toFixed(2);
-    // weatherInfoRef.innerHTML = `<h2>Current Temperature:</h2>`;
-    const cityOrTownName = locationInputRef.value; // Get the name from your input
-    weatherInfoRef.innerHTML = `<h2>${cityOrTownName}</h2>`;
-    weatherInfoRef.innerHTML += `<h3>Current Temperature: ${currentTemperature}°C</p>`;
+    const currentTemperature = Math.round(currentForecast.main.temp);
+    const currentTemperatureMin = Math.round(currentForecast.main.temp_min);
+    const currentTemperatureMax = Math.round(currentForecast.main.temp_max);
+    const currentWeatherDescription = currentForecast.weather[0].description;
+    const currentWeatherIconCode = currentForecast.weather[0].icon;
+    const currentWeatherIconUrl = `https://openweathermap.org/img/wn/${currentWeatherIconCode}@2x.png`;
+    const currentIconImage = document.createElement("img");
+    currentIconImage.src = currentWeatherIconUrl;
 
-    // // Extract and display the next 5 days' forecasts
-    // const next5DaysForecasts = forecasts.slice(0, 5);
+    const capitalizedWeatherDescription = capitalizeFirstLetterOfWords(
+      currentWeatherDescription
+    );
+
+    // weatherInfoRef.innerHTML = `<h2>Current Temperature:</h2>`;
+    // const cityOrTownName = locationInputRef.value; // Get the name from your input
+    const cityOrTownName = locationInputRef.value.split(",")[0].trim(); // Extract the city or town name
+    const capitalizedCityOrTownName =
+      cityOrTownName.charAt(0).toUpperCase() + cityOrTownName.slice(1); // Capitalize the first letter
+    weatherInfoRef.innerHTML = `<h2>${capitalizedCityOrTownName}</h2>`;
+    weatherInfoRef.innerHTML += `<h3>${currentTemperature}°C</h3>`;
+    weatherInfoRef.appendChild(currentIconImage); // Append the weather icon image
+    weatherInfoRef.innerHTML += `<h4>${capitalizedWeatherDescription}</h4>`; // Capitalized weather description
+    weatherInfoRef.innerHTML += `<h4>Low: ${currentTemperatureMin}°C</h4>`;
+    weatherInfoRef.innerHTML += `<h4>High: ${currentTemperatureMax}°C</h4>`;
 
     // Extract and display the next 5 days' forecasts (approximately every 24 hours)
     const next5DaysForecasts = [];
 
-    for (let i = 0; i < forecasts.length; i += 8) {
-      if (next5DaysForecasts.length >= 5) {
+    let nextDay = new Date(); // Initialize with the current date
+    let count = 0;
+
+    for (let i = 0; i < forecasts.length; i++) {
+      const forecastTime = new Date(forecasts[i].dt * 1000);
+
+      // Check if the forecast is for the next day
+      if (forecastTime.getDate() !== nextDay.getDate()) {
+        next5DaysForecasts.push(forecasts[i]);
+        nextDay.setDate(nextDay.getDate() + 1); // Move to the next day
+        count++;
+      }
+
+      if (count >= 5) {
         break; // Stop when you have 5 forecasts
       }
-      next5DaysForecasts.push(forecasts[i]);
     }
 
-    weatherInfoRef.innerHTML += "<h4>Next 5 Days:</h4>";
+    weatherInfoRef.innerHTML += "<h3>Next 5 Days:</h3>";
 
     next5DaysForecasts.forEach((forecast, index) => {
       const forecastTime = new Date(forecast.dt * 1000);
@@ -55,56 +88,26 @@ export async function fetchWeatherData(
 
       const customDate = `${weekday} ${day} ${month}`;
 
-      // const options = { weekday: "long", day: "numeric", month: "long" };
-
       // Calculate temperature in Celsius
-      const temperatureCelsius = forecast.main.temp.toFixed(2);
+      const temperatureCelsius = Math.round(forecast.main.temp);
 
-      // Display the forecast with date and temperature in Celsius
-      //   weatherInfoRef.innerHTML += `<p>Day ${
-      //     index + 1
-      //   }: ${forecastTime.toLocalDateString(
-      //     undefined,
-      //     options
-      //   )} - Temperature: ${temperatureCelsius}°C</p>`;
-      // });
+      const temperatureMin = Math.round(forecast.main.temp_min);
+      const temperatureMax = Math.round(forecast.main.temp_max);
+      const weatherDescription = capitalizeFirstLetterOfWords(
+        forecast.weather[0].description
+      );
+      const weatherIconCode = forecast.weather[0].icon;
+      const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}@2x.png`;
 
       weatherInfoRef.innerHTML += `<p>${customDate} - Temperature: ${temperatureCelsius}°C</p>`;
+      weatherInfoRef.innerHTML += `<p>Low: ${temperatureMin}°C</p>`;
+      weatherInfoRef.innerHTML += `<p>High: ${temperatureMax}°C</p>`;
+      weatherInfoRef.innerHTML += `<p>${weatherDescription}</p>`;
+      weatherInfoRef.innerHTML += `<img src="${weatherIconUrl}" alt="Weather Icon" />`;
     });
-
-    //   weatherInfoRef.innerHTML += `<p>${forecastTime.toLocaleDateString(
-    //     undefined,
-    //     options
-    //   )} - Temperature: ${temperatureCelsius}°C</p>`;
-    // });
 
     weatherInfoRef.style.textAlign = "center"; // Center-align the weather results
   } catch (error) {
     console.error(error);
   }
 }
-
-//     // Use map to extract the 9 am forecasts
-//     const forecastsAt9am = forecasts.filter(
-//       (forecast) => new Date(forecast.dt * 1000).getUTCHours() === 9
-//     );
-
-//     // Extract and display the next 5 days at 9 am
-//     const next5DaysForecasts = forecastsAt9am.slice(0, 5);
-//     weatherInfoRef.innerHTML = "<h2>Next 5 Days at 9 am:</h2>";
-
-//     next5DaysForecasts.forEach((forecast, index) => {
-//       const forecastTime = new Date(forecast.dt * 1000);
-
-//       // Calculate temperature in Celsius
-//       const temperatureCelsius = forecast.main.temp.toFixed(2);
-
-//       // Display the forecast with date and temperature in Celsius
-//       weatherInfoRef.innerHTML += `<p>Day ${
-//         index + 1
-//       }: ${forecastTime.toDateString()}, 9 am - Temperature: ${temperatureCelsius}°C</p>`;
-//     });
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
