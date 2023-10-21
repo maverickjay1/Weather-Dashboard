@@ -26,14 +26,30 @@ locationInputRef.addEventListener("input", async () => {
   }
 });
 
-searchButtonRef.addEventListener("click", async () => {
+//this code replaces the search button below. if i reactivate search, deactivate this.
+locationInputRef.addEventListener("change", async () => {
   try {
     const coords = await handleLocationSearch(locationInputRef);
-    fetchWeatherData(coords.latitude, coords.longitude, weatherInfoRef);
+    fetchWeatherData(
+      coords.latitude,
+      coords.longitude,
+      weatherInfoRef,
+      locationInputRef
+    );
   } catch (error) {
     console.error("Location search error: ", error);
   }
 });
+
+//search button - can re-add if you see fit
+// searchButtonRef.addEventListener("click", async () => {
+//   try {
+//     const coords = await handleLocationSearch(locationInputRef);
+//     fetchWeatherData(coords.latitude, coords.longitude, weatherInfoRef);
+//   } catch (error) {
+//     console.error("Location search error: ", error);
+//   }
+// });
 
 //Workflow 1:
 
