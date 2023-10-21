@@ -42,7 +42,11 @@ export function displayLocationSuggestions(
   if (suggestions.length) {
     const choicesHTML = suggestions.map((item, index) => {
       const { name = "", state = "", country = "" } = item;
-      const fullLocation = `${name}, ${state}, ${country}`;
+      let fullLocation = `${name}, `;
+      if (state && state.trim() !== "") {
+        fullLocation += `${state}, `;
+      }
+      fullLocation += country;
       return `<p id="${index}" >${fullLocation}</p>`;
     });
 
