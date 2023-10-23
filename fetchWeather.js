@@ -40,8 +40,6 @@ export async function fetchWeatherData(
       currentWeatherDescription
     );
 
-    // weatherInfoRef.innerHTML = `<h2>Current Temperature:</h2>`;
-    // const cityOrTownName = locationInputRef.value; // Get the name from your input
     const cityOrTownName = locationInputRef.value.split(",")[0].trim(); // Extract the city or town name
     const capitalizedCityOrTownName =
       cityOrTownName.charAt(0).toUpperCase() + cityOrTownName.slice(1); // Capitalize the first letter
@@ -55,7 +53,7 @@ export async function fetchWeatherData(
     // Extract and display the next 5 days' forecasts (approximately every 24 hours)
     const next5DaysForecasts = [];
 
-    let nextDay = new Date(); // Initialize with the current date
+    let nextDay = new Date();
     let count = 0;
 
     for (let i = 0; i < forecasts.length; i++) {
@@ -73,7 +71,8 @@ export async function fetchWeatherData(
       }
     }
 
-    weatherInfoRef.innerHTML += "<h3>Next 5 Days:</h3>";
+    weatherInfoRef.innerHTML +=
+      "<h3 class='forecast-heading'>Next 5 Days:</h3>";
 
     next5DaysForecasts.forEach((forecast, index) => {
       const forecastTime = new Date(forecast.dt * 1000);
@@ -99,11 +98,20 @@ export async function fetchWeatherData(
       const weatherIconCode = forecast.weather[0].icon;
       const weatherIconUrl = `https://openweathermap.org/img/wn/${weatherIconCode}@2x.png`;
 
-      weatherInfoRef.innerHTML += `<p>${customDate} - Temperature: ${temperatureCelsius}°C</p>`;
-      weatherInfoRef.innerHTML += `<p>Low: ${temperatureMin}°C</p>`;
-      weatherInfoRef.innerHTML += `<p>High: ${temperatureMax}°C</p>`;
-      weatherInfoRef.innerHTML += `<p>${weatherDescription}</p>`;
-      weatherInfoRef.innerHTML += `<img src="${weatherIconUrl}" alt="Weather Icon" />`;
+      // Create a container for each day's forecast
+      const dayContainer = document.createElement("div");
+      dayContainer.classList.add("day-container");
+      dayContainer.innerHTML = `
+      <p class="custom-date">${customDate}</p>
+        <p>Temperature: ${temperatureCelsius}°C</p>
+        <p>Low: ${temperatureMin}°C</p>
+        <p>High: ${temperatureMax}°C</p>
+        <p>${weatherDescription}</p>
+        <img src="${weatherIconUrl}" alt="Weather Icon" />
+      `;
+
+      // Append the day container to the weather info
+      weatherInfoRef.appendChild(dayContainer);
     });
 
     weatherInfoRef.style.textAlign = "center"; // Center-align the weather results

@@ -1,21 +1,9 @@
-/*.searchBox {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  //   flex-direction: column;
-  margin-top: 18%;
-}
-.locationDropdown {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  background-color: rgba(193, 230, 199, 0.65);
-  padding-left: 1%;
-  padding-right: 1%;
-  border-radius: 4px;
-  //   text bold
-}*/
+// body {
+//   // background-color: black;
+//   // background-image: url(Images/weatherBackground.jpg);
+//   // background-size: cover;
+//   // background-position: center center;
+// }
 
 header h1 {
   text-align: center;
@@ -48,4 +36,17 @@ header h1 {
     color: rgb(0, 0, 0);
   }
   cursor: pointer;
+}
+
+.day-container {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+
+  .custom-date {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+  }
 }

@@ -58,8 +58,8 @@ export function displayLocationSuggestions(
       item.addEventListener("click", () => {
         locationInputRef.value = item.textContent.trim();
         locationDropdownRef.innerHTML = ""; // Clear the dropdown
-        // Automatically trigger the search
-        searchButtonRef.click();
+        // // Automatically trigger the search
+        // searchButtonRef.click();
       });
     });
   } else {
