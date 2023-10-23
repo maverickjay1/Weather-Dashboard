@@ -8,7 +8,7 @@ export async function handleLocationSearch(locationInputRef) {
 
     //geocoding - get coords for inputted location
     try {
-      const geocodingUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=10&appid=${appIdGeo}`;
+      const geocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=10&appid=${appIdGeo}`;
       const geocodingResponse = await axios.get(geocodingUrl);
 
       console.log(geocodingResponse);
@@ -29,7 +29,7 @@ export async function handleLocationSearch(locationInputRef) {
 
 export async function fetchLocationSuggestions(query) {
   const appIdGeo = "37b29f091f8754cf8600dea56dee3863";
-  const geocodingUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=10&appid=${appIdGeo}`;
+  const geocodingUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${query}&limit=10&appid=${appIdGeo}`;
   const response = await axios.get(geocodingUrl);
   return response.data;
 }
